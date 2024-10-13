@@ -4,7 +4,7 @@ import { Layout } from "../../components/Layout/Layout";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
 import { Header } from "../../components/Header/Header";
-import UserContext from "../../context/UserCoxtext";
+import UserContext from "../../context/UserContext";
 
 export default function Search() {
   const navigate = useNavigate();

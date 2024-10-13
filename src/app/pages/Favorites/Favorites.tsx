@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Header } from "../../components/Header/Header";
 import { Layout } from "../../components/Layout/Layout";
-import UserContext from "../../context/UserCoxtext";
+import UserContext from "../../context/UserContext";
 
 export default function Favorites() {
   const { userName } = useContext(UserContext);

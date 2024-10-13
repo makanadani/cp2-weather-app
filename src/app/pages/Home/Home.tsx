@@ -1,11 +1,10 @@
-import { useContext } from 'react';
-import { Layout } from '../components/Layout/Layout.style';
-import { Header } from '../components/Header/Header.style';
-import UserContext from '../context/UserContext.tsx';
-import { GetServerSideProps } from 'next';
-import { VerifyLogin } from '../utils/verifyLogin';
+import { useContext, useEffect, useState } from 'react';
+import { Layout } from '../../components/Layout/Layout';
+import { Header } from '../../components/Header/Header';
+import UserContext from '../../context/UserContext';
+import { VerifyLogin } from '../../utils/verifyLogin';
 
-interface CityData {
+interface CityWeather {
   cidade: string;
   estado: string;
   clima: {
@@ -15,72 +14,57 @@ interface CityData {
   }[];
 }
 
-interface HomeProps {
-  cityData: CityData | null;
-  cityCode: number;
-  isAuthenticated: boolean;
-}
+export default function Home() {
+  const { userName } = useContext(UserContext) || {};
 
-export default function Home({ cityData, cityCode, isAuthenticated }: HomeProps) {
-  const { userName } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cityData, setCityData] = useState(null);
 
-  if (!isAuthenticated) {
-    VerifyLogin();
-    return null;
-  }
+  const loadCity = async (cityCode: number) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
+      );
+      const data = await response.json();
+      setCityData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const inicialCity = 244;
+    loadCity(inicialCity);
+  }, []);
+
+  useEffect(() => {
+    if (!userName) {
+      VerifyLogin();
+    }
+  }, [userName]);
 
   return (
     <Layout>
-      <Header title="Inicio" userName={userName} />
+      <Header title="Inicio" userName={userName || 'Guest'} />
       <div>
-        {!cityData ? (
-          <p>Carregando</p>
+        {isLoading ? (
+          <p>Carregando...</p>
         ) : (
           <div>
             <h2>
-              {cityData.cidade}/{cityData.estado}
+              {cityData?.cidade}/{cityData?.estado}
             </h2>
             <p>
-              Min<span>{cityData.clima[0].min}</span>/ Max
-              <span>{cityData.clima[0].max}</span>
+              Min<span>{cityData?.clima[0].min}</span>/ Max
+              <span>{cityData?.clima[0].max}</span>
             </p>
-            <p>{cityData.clima[0].condicao_desc}</p>
+            <p>{cityData?.clima[0].condicao_desc}</p>
           </div>
         )}
       </div>
     </Layout>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cityCode = context.query.cityCode || 244; 
-  let cityData = null;
-
-  try {
-    const response = await fetch(
-      `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
-    );
-    cityData = await response.json();
-  } catch (error) {
-    console.error('Erro ao carregar dados da cidade', error);
-  }
-
-  const isAuthenticated = true;
-
-  if (!isAuthenticated) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      cityData,
-      cityCode,
-      isAuthenticated,
-    },
-  };
-};

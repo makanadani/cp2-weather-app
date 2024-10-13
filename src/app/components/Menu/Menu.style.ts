@@ -22,5 +22,7 @@ export const StyledMenuItem = styled.li`
   & a {
     font-size: 0.8rem;
     color: #1f1e31;
+    margin-top: 0.3rem;
+    text-decoration: none; 
   }
 `;

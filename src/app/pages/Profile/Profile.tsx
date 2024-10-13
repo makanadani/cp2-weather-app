@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import UserContext from "../../context/UserCoxtext";
+import UserContext from "../../context/UserContext";
 import { Layout } from "../../components/Layout/Layout";
 import { Header } from "../../components/Header/Header";
 

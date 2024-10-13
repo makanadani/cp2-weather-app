@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import UserContext from "../../context/UserCoxtext";
+import UserContext from "../../context/UserContext";
 import { Layout } from "../../components/Layout/Layout";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
