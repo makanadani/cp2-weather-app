@@ -1,2 +1,2 @@
-# cp2-weather-app
+# next-weather-app
 Checkpoint 2 Frond-End
