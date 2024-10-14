@@ -1,9 +1,9 @@
 "use client";
 
-import { useContext, useEffect, useState } from 'react';
-import { Header } from './components/Header/Header';
-import UserContext from './UserContext';
-import { VerifyLogin } from './utils/verifyLogin';
+import { useEffect, useState } from 'react';
+import { Header } from '../components/Header/Header';
+import { useUserContext } from '../UserContext';
+import { VerifyLogin } from '../utils/verifyLogin';
 
 interface CityWeather {
   cidade: string;
@@ -16,7 +16,7 @@ interface CityWeather {
 }
 
 export default function Home() {
-  const { userName } = useContext(UserContext) || {};
+  const { userName, setUserName } = useUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cityData, setCityData] = useState<CityWeather | null>(null);
 

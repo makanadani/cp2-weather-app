@@ -3,9 +3,9 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
-import { useUserContext } from "../../UserContext";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+import { useUserContext } from "../UserContext";
+import { Button } from "../components/Button/Button";
+import { Input } from "../components/Input/Input";
 
 export default function Login() {
   const { setUserName } = useUserContext();

@@ -1,8 +1,8 @@
 "use client";
 
 import { useContext } from "react";
-import { Header } from "../../components/Header/Header";
-import UserContext from "../../UserContext";
+import { Header } from "../components/Header/Header";
+import UserContext from "../UserContext";
 
 export default function Favorites() {
   const { userName } = useContext(UserContext) || {};

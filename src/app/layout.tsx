@@ -3,6 +3,7 @@
 import { Menu } from './components/Menu/Menu';
 import styled from 'styled-components';
 import { UserContextProvider } from './UserContext';
+import React from 'react';
 
 const StyledLayout = styled.div`
   width: 92vw;
@@ -15,9 +16,9 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children }: {children: React.ReactNode}) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <body>
         <UserContextProvider>
           <StyledLayout>

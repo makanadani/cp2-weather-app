@@ -1,30 +1,22 @@
 "use client";
 
-import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useContext, useEffect } from "react";
-import UserContext from "../UserContext";
-
-interface DecodedToken extends JwtPayload {
-  name: string;
-}
+import { useUserContext } from "../UserContext";
 
 export const VerifyLogin = () => {
-  const userContext = useContext(UserContext);
+  const { setUserName } = useUserContext();
 
   useEffect(() => {
     const sessionData = sessionStorage.getItem("userToken");
-    if (sessionData && userContext) {
+    if (sessionData) {
       try {
-        const userData = jwtDecode<DecodedToken>(sessionData);
-        if (userData.name) {
-          userContext.setUserName(userData.name);
-        } else {
-          console.error("O token não contém o nome do usuário.");
-        }
+        const userData = JSON.parse(sessionData);
+        setUserName(userData.name);
       } catch (error) {
-        console.error("Erro ao decodificar o token:", error);
+        console.error("Erro ao decodificar o token", error);
       }
     }
-  }, [userContext]);
+  }, [setUserName]);
+
   return null;
 };

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Input } from "../../components/Input/Input";
-import { Button } from "../../components/Button/Button";
-import { Header } from "../../components/Header/Header";
-import { useUserContext } from "../../UserContext";
+import { Input } from "../components/Input/Input";
+import { Button } from "../components/Button/Button";
+import { Header } from "../components/Header/Header";
+import { useUserContext } from "../UserContext";
 
 interface City {
   id: number;
