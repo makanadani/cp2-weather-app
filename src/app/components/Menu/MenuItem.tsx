@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { StyledMenuItem } from "./Menu.style";
 import Link from "next/link";

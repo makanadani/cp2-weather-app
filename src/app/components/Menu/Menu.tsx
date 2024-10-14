@@ -1,3 +1,5 @@
+"use client";
+
 import { BiHomeAlt, BiSearch, BiHeart, BiUserCircle } from "react-icons/bi";
 import { StyledMenu, StyledMenuItem, StyledWrapperMenu } from "./Menu.style";
 import Link from "next/link";

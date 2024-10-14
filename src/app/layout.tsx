@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu } from './components/Menu/Menu';
 import styled from 'styled-components';
 

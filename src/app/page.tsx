@@ -1,3 +1,5 @@
+"use client";
+
 import { Header } from "./components/Header/Header";
 import { useContext } from "react";
 import UserContext from "./context/UserContext";

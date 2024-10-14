@@ -1,3 +1,5 @@
+"use client"
+
 import { StyledInput, StyledLabel } from "./Input.style";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
