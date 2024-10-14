@@ -1,12 +1,9 @@
-"use client";
-
-import { useContext, useEffect } from "react";
 import { useUserContext } from "../context/UserContext";
 
-export const VerifyLogin = () => {
+export const verifyLogin = () => {
   const { setUserName } = useUserContext();
 
-  useEffect(() => {
+  if (typeof window !== "undefined") {
     const sessionData = sessionStorage.getItem("userToken");
     if (sessionData) {
       try {
@@ -16,7 +13,5 @@ export const VerifyLogin = () => {
         console.error("Erro ao decodificar o token", error);
       }
     }
-  }, [setUserName]);
-
-  return null;
+  }
 };

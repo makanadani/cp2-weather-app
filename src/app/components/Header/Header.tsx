@@ -16,16 +16,20 @@ interface HeaderProps {
 
 export const Header = ({ title, userName }: HeaderProps) => {
   const router = useRouter();
-  const { setUserName } = useContext(UserContext) || {};
+  const userContext = useContext(UserContext);
 
   const handleLogin = () => {
     router.push("/login");
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("userToken");
-    setUserName?.("");
-    router.push("/login");
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("userToken");
+      if (userContext?.setUserName) {
+        userContext.setUserName("");
+      }
+      router.push("/login");
+    }
   };
 
   return (

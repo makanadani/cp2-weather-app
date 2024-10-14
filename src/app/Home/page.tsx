@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Header } from '../components/Header/Header';
-import { useUserContext } from '../context/UserContext';
-import { VerifyLogin } from '../utils/verifyLogin';
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUserContext } from "../context/UserContext";
+import { Header } from "../components/Header/Header";
+import { verifyLogin } from "../utils/verifyLogin";
 
 interface CityWeather {
   cidade: string;
@@ -16,7 +17,10 @@ interface CityWeather {
 }
 
 export default function Home() {
-  const { userName, setUserName } = useUserContext();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { userName } = useUserContext();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cityData, setCityData] = useState<CityWeather | null>(null);
 
@@ -36,19 +40,21 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const inicialCity = 244;
-    loadCity(inicialCity);
-  }, []);
+    const cityCodeParam = searchParams.get("cityCode");
+    const cityCode = cityCodeParam ? Number(cityCodeParam) : 244;
+    loadCity(cityCode);
+  }, [searchParams]);
 
   useEffect(() => {
     if (!userName) {
-      VerifyLogin();
+      verifyLogin();
     }
   }, [userName]);
 
   return (
     <>
-      <Header title="Inicio" userName={userName || 'Guest'} />
+      <Header title="Inicio" userName={userName || "Convidado"} />
+
       <div>
         {isLoading ? (
           <p>Carregando...</p>

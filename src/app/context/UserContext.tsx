@@ -1,13 +1,16 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useContext } from "react";
 
 interface UserContextType {
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext<UserContextType>({
+  userName: "",
+  setUserName: () => {},
+});
 
 interface UserContextProviderProps {
   children: ReactNode;
@@ -24,11 +27,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 };
 
 export const useUserContext = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserContext must be used within a UserContextProvider");
-  }
-  return context;
+  return useContext(UserContext);
 };
 
 export default UserContext;

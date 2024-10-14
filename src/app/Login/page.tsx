@@ -1,18 +1,22 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { useUserContext } from "../context/UserContext";
+import UserContext from "../context/UserContext";
 import { Button } from "../components/Button/Button";
 import { Input } from "../components/Input/Input";
 
+interface UserData {
+  name: string;
+}
+
 export default function Login() {
-  const { setUserName } = useUserContext();
+  const userContext = useContext(UserContext);
   const router = useRouter();
 
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLogin(event.target.value);
@@ -24,7 +28,7 @@ export default function Login() {
 
   const handleSendLogin = async (params: { login: string; password: string }) => {
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
@@ -36,16 +40,18 @@ export default function Login() {
 
       if (data && data.token) {
         sessionStorage.setItem("userToken", JSON.stringify(data));
-        const userData: any = jwtDecode(data.token);
-        setUserName(userData.name);
-        router.push("/perfil");
-      } else {
-        console.error("Erro no login, token não encontrado!");
+        const userData: UserData = jwtDecode(data.token);
+
+        if (userContext && userContext.setUserName) {
+          userContext.setUserName(userData.name);
+        }
+
+        router.push("/profile");
       }
     } catch (error) {
-      console.log("Erro ao fazer login.", error);
+      console.log("error", error);
     } finally {
-      console.log("Finalizado o processo de login!");
+      console.log("finally");
     }
   };
 
@@ -68,7 +74,7 @@ export default function Login() {
           name="login"
           label="Login"
           onChange={handleLogin}
-          placeholder="Digite seu e-mail"
+          placeholder="Digite seu email"
         />
 
         <Input
@@ -78,7 +84,6 @@ export default function Login() {
           name="password"
           onChange={handlePassword}
         />
-        
         <Button type="button" onClick={handleClick}>
           Login
         </Button>

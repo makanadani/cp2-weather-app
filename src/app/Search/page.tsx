@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Input } from "../components/Input/Input";
 import { Button } from "../components/Button/Button";
 import { Header } from "../components/Header/Header";
@@ -47,10 +47,7 @@ export default function Search() {
   };
 
   const handleNavigate = (cityCode: number) => {
-    router.push({
-      pathname: "/",
-      query: { cityCode: cityCode.toString() },
-    });
+    router.push(`/?cityCode=${cityCode}`);
   };
 
   return (

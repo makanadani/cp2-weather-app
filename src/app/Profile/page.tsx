@@ -1,37 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { useUserContext } from "../context/UserContext";
+import UserContext from "../context/UserContext";
 import { Header } from "../components/Header/Header";
 
+interface CustomJwtPayload {
+  name: string;
+}
+
 export default function Profile() {
-  const { userName, setUserName } = useUserContext();
   const router = useRouter();
+  const { userName, setUserName } = useContext(UserContext);
 
   useEffect(() => {
-    const storedUserToken = sessionStorage.getItem("userToken");
+    const userToken = JSON.parse(sessionStorage.getItem("userToken") || "null");
 
-    if (storedUserToken) {
-      try {
-        const userToken = JSON.parse(storedUserToken);
-        const userData: any = jwtDecode(userToken.token);
-        setUserName(userData.name);
-      } catch (error) {
-        console.error("Erro ao decodificar o token JWT", error);
-        router.push("/login");
-      }
+    if (userToken) {
+      const userData = jwtDecode<CustomJwtPayload>(userToken.token);
+      setUserName(userData.name);
     } else {
       router.push("/login");
     }
-  }, [router, setUserName]);
+  }, [setUserName, router]);
 
   return (
     <>
-      <Header title="Perfil" userName={userName || "Convidado"} />
+      <Header title="Perfil" userName={userName} />
       <div>
-        <h2>Bem-vindo ao seu perfil, {userName || "Convidado"}!</h2>
+        <h2>Bem-vindo, {userName}</h2>
+        <p>Aqui estão suas informações de perfil.</p>
       </div>
     </>
   );

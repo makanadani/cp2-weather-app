@@ -1,18 +1,37 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header/Header';
 import { useUserContext } from './context/UserContext';
+import { verifyLogin } from './utils/verifyLogin';
 
 export default function HomePage() {
-  const { userName } = useUserContext();
+  const { userName, setUserName } = useUserContext();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("userToken");
+    if (sessionData) {
+      try {
+        const userData = JSON.parse(sessionData);
+        setUserName(userData.name);
+      } catch (error) {
+        console.error("Erro ao decodificar o token", error);
+      }
+    } else {
+      verifyLogin();
+    }
+    setIsLoading(false);
+  }, [setUserName]);
 
   return (
-    <>
-      <Header title="Bem-vindo" userName={userName || 'Visitante'} />
-      <div>
-        <h1>Página Principal</h1>
-        <p>Bem-vindo ao nosso site! Aqui está a página principal.</p>
-      </div>
-    </>
+    <div>
+      <Header title="Página Inicial" userName={userName || 'Visitante'} />
+      {isLoading ? (
+        <p>Carregando...</p>
+      ) : (
+        <p>Bem-vindo, {userName}!</p>
+      )}
+    </div>
   );
 }
