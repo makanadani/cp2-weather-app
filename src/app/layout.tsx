@@ -2,6 +2,7 @@
 
 import { Menu } from './components/Menu/Menu';
 import styled from 'styled-components';
+import { UserContextProvider } from './UserContext';
 
 const StyledLayout = styled.div`
   width: 92vw;
@@ -18,12 +19,14 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en">
       <body>
-        <StyledLayout>
-          <main role="main">{children}</main>
-          <footer>
-            <Menu />
-          </footer>
-        </StyledLayout>
+        <UserContextProvider>
+          <StyledLayout>
+            <main role="main">{children}</main>
+            <footer>
+              <Menu />
+            </footer>
+          </StyledLayout>
+        </UserContextProvider>
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useContext, useEffect } from "react";
-import UserContext from "../context/UserContext";
+import UserContext from "../UserContext";
 
 interface DecodedToken extends JwtPayload {
   name: string;

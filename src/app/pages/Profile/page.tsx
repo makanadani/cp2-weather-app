@@ -1,13 +1,13 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
-import UserContext from "../../context/UserContext";
+import { useUserContext } from "../../UserContext";
 import { Header } from "../../components/Header/Header";
 
 export default function Profile() {
-  const { userName, setUserName } = useContext(UserContext);
+  const { userName, setUserName } = useUserContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function Profile() {
     <>
       <Header title="Perfil" userName={userName || "Convidado"} />
       <div>
-        <h2>Bem-vindo ao seu perfil, {userName || "Convidado"}</h2>
+        <h2>Bem-vindo ao seu perfil, {userName || "Convidado"}!</h2>
       </div>
     </>
   );

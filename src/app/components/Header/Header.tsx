@@ -1,8 +1,8 @@
 "use client";
 
-import { useContext } from "react";
 import { useRouter } from "next/router";
-import UserContext from "../../context/UserContext";
+import { useContext } from "react";
+import UserContext from "../../UserContext";
 import {
   StyledHeader,
   StyledUserData,
@@ -16,7 +16,7 @@ interface HeaderProps {
 
 export const Header = ({ title, userName }: HeaderProps) => {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+  const { setUserName } = useContext(UserContext) || {};
 
   const handleLogin = () => {
     router.push("/login");
@@ -24,9 +24,7 @@ export const Header = ({ title, userName }: HeaderProps) => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("userToken");
-    if (userContext && userContext.setUserName) {
-      userContext.setUserName("");
-    }
+    setUserName?.("");
     router.push("/login");
   };
 
