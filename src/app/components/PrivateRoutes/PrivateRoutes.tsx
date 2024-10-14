@@ -1,9 +1,24 @@
-import { Navigate, Outlet } from "react-router-dom";
+"use client";
 
-export const PrivateRoutes = () => {
-  const userToken = sessionStorage.getItem("userToken");
+import { useRouter } from "next/router";
+import { useEffect, ReactNode } from "react";
 
-  const token = JSON.parse(userToken) || null;
+interface PrivateRoutesProps {
+  children: ReactNode;
+}
 
-  return token ? <Outlet /> : <Navigate to="/login" />;
+export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const userToken = sessionStorage.getItem("userToken");
+
+    const token = userToken ? JSON.parse(userToken) : null;
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  return <>{children}</>;
 };

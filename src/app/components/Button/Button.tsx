@@ -13,9 +13,3 @@ export const Button = ({ children, type, onClick }: ButtonProps) => {
     </StyledButton>
   );
 };
-
-{
-  /* <StyledButton type={type} onClick={onClick}>
-      {children}
-    </StyledButton> */
-}

@@ -1,16 +1,24 @@
+"use client";
+
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Layout } from "../../components/Layout/Layout";
+import { useRouter } from "next/router";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
 import { Header } from "../../components/Header/Header";
 import UserContext from "../../context/UserContext";
 
+interface City {
+  id: number;
+  nome: string;
+  estado: string;
+}
+
 export default function Search() {
-  const navigate = useNavigate();
   const { userName } = useContext(UserContext);
+  const router = useRouter();
+
   const [cityName, setCityName] = useState<string>("");
-  const [cityList, setCityList] = useState([]);
+  const [cityList, setCityList] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +33,7 @@ export default function Search() {
         `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
       );
 
-      const data = await response.json();
+      const data: City[] = await response.json();
       setCityList(data);
     } catch (error) {
       console.log(error);
@@ -39,16 +47,15 @@ export default function Search() {
   };
 
   const handleNavigate = (cityCode: number) => {
-    const state = {
-      cityCode: cityCode,
-    };
-
-    navigate("/", { state });
+    router.push({
+      pathname: "/",
+      query: { cityCode: cityCode.toString() },
+    });
   };
 
   return (
-    <Layout>
-      <Header title="Busca" userName={userName} />
+    <>
+      <Header title="Busca" userName={userName || "Convidado"} />
       <form>
         <Input
           label="Buscar cidade"
@@ -64,7 +71,7 @@ export default function Search() {
 
       <div>
         {isLoading ? (
-          <p>Carregando</p>
+          <p>Carregando...</p>
         ) : (
           <ul>
             {cityList.map((city) => (
@@ -75,6 +82,6 @@ export default function Search() {
           </ul>
         )}
       </div>
-    </Layout>
+    </>
   );
 }

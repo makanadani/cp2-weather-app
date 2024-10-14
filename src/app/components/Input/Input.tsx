@@ -1,6 +1,6 @@
-import { StyledInput, StyledLabel } from "./Input.stye";
+import { StyledInput, StyledLabel } from "./Input.style";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: string;
   id: string;
   name: string;

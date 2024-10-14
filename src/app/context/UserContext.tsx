@@ -5,26 +5,23 @@ interface UserContextType {
   setUserName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext<UserContextType>({
+  userName: "",
+  setUserName: () => {}
+});
 
 interface UserContextProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const UserContextProvider = ({ children }: UserContextProviderProps) => {
-  const [userName, setUserName] = useState("");
+export const UserContextProvider = ({ children }: UserContextProviderProps) => {
+  const [userName, setUserName] = useState<string>("");
 
   return (
-    <UserContext.Provider
-      value={{
-        userName,
-        setUserName,
-      }}
-    >
+    <UserContext.Provider value={{ userName, setUserName }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-export { UserContextProvider };
 export default UserContext;

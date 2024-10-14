@@ -1,15 +1,16 @@
+"use client";
+
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "../../context/UserContext";
-import { Layout } from "../../components/Layout/Layout";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 
 export default function Login() {
   const { setUserName } = useContext(UserContext);
+  const router = useRouter();
 
-  const navigate = useNavigate();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,9 +22,9 @@ export default function Login() {
     setPassword(event.target.value);
   };
 
-  const handleSendLogin = async (params: object) => {
+  const handleSendLogin = async (params: { login: string; password: string }) => {
     try {
-      const response = await fetch("http://localhost:8000/login", {
+      const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
@@ -33,17 +34,18 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (data) {
+      if (data && data.token) {
         sessionStorage.setItem("userToken", JSON.stringify(data));
-        const userData = jwtDecode(data.token);
+        const userData: any = jwtDecode(data.token);
         setUserName(userData.name);
-
-        navigate("/perfil");
+        router.push("/perfil");
+      } else {
+        console.error("Erro no login, token não encontrado!");
       }
     } catch (error) {
-      console.log("error", error);
+      console.log("Erro ao fazer login.", error);
     } finally {
-      console.log("finnaly");
+      console.log("Finalizado o processo de login!");
     }
   };
 
@@ -57,7 +59,7 @@ export default function Login() {
   };
 
   return (
-    <Layout>
+    <>
       <h1>Login</h1>
       <form>
         <Input
@@ -66,7 +68,7 @@ export default function Login() {
           name="login"
           label="Login"
           onChange={handleLogin}
-          placeholder="digite seu email"
+          placeholder="Digite seu e-mail"
         />
 
         <Input
@@ -76,10 +78,11 @@ export default function Login() {
           name="password"
           onChange={handlePassword}
         />
+        
         <Button type="button" onClick={handleClick}>
           Login
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }

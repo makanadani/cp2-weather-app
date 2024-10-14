@@ -1,5 +1,6 @@
+"use client";
+
 import { useContext, useEffect, useState } from 'react';
-import { Layout } from '../../components/Layout/Layout';
 import { Header } from '../../components/Header/Header';
 import UserContext from '../../context/UserContext';
 import { VerifyLogin } from '../../utils/verifyLogin';
@@ -16,9 +17,8 @@ interface CityWeather {
 
 export default function Home() {
   const { userName } = useContext(UserContext) || {};
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [cityData, setCityData] = useState(null);
+  const [cityData, setCityData] = useState<CityWeather | null>(null);
 
   const loadCity = async (cityCode: number) => {
     setIsLoading(true);
@@ -26,7 +26,7 @@ export default function Home() {
       const response = await fetch(
         `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
       );
-      const data = await response.json();
+      const data: CityWeather = await response.json();
       setCityData(data);
     } catch (error) {
       console.log(error);
@@ -47,7 +47,7 @@ export default function Home() {
   }, [userName]);
 
   return (
-    <Layout>
+    <>
       <Header title="Inicio" userName={userName || 'Guest'} />
       <div>
         {isLoading ? (
@@ -65,6 +65,6 @@ export default function Home() {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 }

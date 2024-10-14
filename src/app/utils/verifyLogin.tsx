@@ -24,6 +24,5 @@ export const VerifyLogin = () => {
       }
     }
   }, [userContext]);
-
   return null;
 };
