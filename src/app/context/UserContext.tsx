@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, ReactNode, useContext } from "react";
+import { createContext, useState, ReactNode } from "react";
 
 interface UserContextType {
   userName: string;
@@ -24,10 +24,6 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
       {children}
     </UserContext.Provider>
   );
-};
-
-export const useUserContext = () => {
-  return useContext(UserContext);
 };
 
 export default UserContext;

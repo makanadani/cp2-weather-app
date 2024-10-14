@@ -2,14 +2,9 @@
 
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 import UserContext from "../context/UserContext";
 import { Button } from "../components/Button/Button";
 import { Input } from "../components/Input/Input";
-
-interface UserData {
-  name: string;
-}
 
 export default function Login() {
   const userContext = useContext(UserContext);
@@ -18,62 +13,58 @@ export default function Login() {
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLogin(event.target.value);
-  };
+  const handleSendLogin = async () => {
+    if (!login || !password) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
 
-  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSendLogin = async (params: { login: string; password: string }) => {
     try {
       const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
-        body: JSON.stringify(params),
+        body: JSON.stringify({ login, password }),
       });
+
+      if (!response.ok) {
+        throw new Error("Erro na autenticação. Verifique suas credenciais.");
+      }
 
       const data = await response.json();
 
       if (data && data.token) {
         sessionStorage.setItem("userToken", JSON.stringify(data));
-        const userData: UserData = jwtDecode(data.token);
 
         if (userContext && userContext.setUserName) {
-          userContext.setUserName(userData.name);
+          userContext.setUserName(data.name);
+        } else {
+          console.error("UserContext não está disponível.");
         }
 
         router.push("/profile");
       }
     } catch (error) {
-      console.log("error", error);
-    } finally {
-      console.log("finally");
+      console.error("Erro ao realizar login:", error);
     }
-  };
-
-  const handleClick = () => {
-    const params = {
-      login: login,
-      password: password,
-    };
-
-    handleSendLogin(params);
   };
 
   return (
     <>
       <h1>Login</h1>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSendLogin();
+        }}
+      >
         <Input
           type="text"
           id="login"
           name="login"
           label="Login"
-          onChange={handleLogin}
+          onChange={(e) => setLogin(e.target.value)}
           placeholder="Digite seu email"
         />
 
@@ -82,9 +73,11 @@ export default function Login() {
           type="password"
           id="password"
           name="password"
-          onChange={handlePassword}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="button" onClick={handleClick}>
+        <Button
+          type="submit"
+        >
           Login
         </Button>
       </form>

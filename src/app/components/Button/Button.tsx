@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import { StyledButton } from "./Button.style";
 
 interface ButtonProps {
   children: React.ReactNode;
-  type: "button" | "submit" | "reset" | undefined;
-  onClick: () => void;
+  type: "button" | "submit" | "reset";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Button = ({ children, type, onClick }: ButtonProps) => {

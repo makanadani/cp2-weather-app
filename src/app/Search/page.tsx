@@ -1,84 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
+import UserContext from "../context/UserContext";
+import { Header } from "../components/Header/Header";
 import { Input } from "../components/Input/Input";
 import { Button } from "../components/Button/Button";
-import { Header } from "../components/Header/Header";
-import { useUserContext } from "../context/UserContext";
-
-interface City {
-  id: number;
-  nome: string;
-  estado: string;
-}
 
 export default function Search() {
-  const { userName } = useUserContext();
+  const { userName } = useContext(UserContext);
   const router = useRouter();
-
   const [cityName, setCityName] = useState<string>("");
-  const [cityList, setCityList] = useState<City[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cityList, setCityList] = useState<any[]>([]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCityName(event.target.value);
-  };
-
-  const loadCities = async () => {
-    setIsLoading(true);
-
+  const handleSearch = async () => {
+    console.log("handleSearch chamado");
+    if (!cityName) {
+      alert("Por favor, insira o nome de uma cidade.");
+      return;
+    }
     try {
       const response = await fetch(
         `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
       );
-
-      const data: City[] = await response.json();
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados da cidade");
+      }
+      const data = await response.json();
+      console.log("Dados recebidos:", data);
       setCityList(data);
     } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+      console.error("Erro:", error);
     }
   };
 
-  const handleClick = () => {
-    loadCities();
-  };
-
   const handleNavigate = (cityCode: number) => {
+    console.log("Navegando para a cidade com código:", cityCode);
     router.push(`/?cityCode=${cityCode}`);
   };
 
   return (
-    <>
-      <Header title="Busca" userName={userName || "Convidado"} />
-      <form>
-        <Input
-          label="Buscar cidade"
-          id="search"
-          name="search"
-          type="text"
-          onChange={handleChange}
-        />
-        <Button type="button" onClick={handleClick}>
-          Buscar
-        </Button>
-      </form>
-
-      <div>
-        {isLoading ? (
-          <p>Carregando...</p>
-        ) : (
-          <ul>
-            {cityList.map((city) => (
-              <li key={city.id} onClick={() => handleNavigate(city.id)}>
-                {city.nome} / {city.estado}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </>
+    <div>
+      <Header title="Busca" userName={userName || "Visitante"} />
+      <Input
+        id="search"
+        name="search"
+        label="Buscar Cidade"
+        type="text"
+        onChange={(e) => {
+          console.log("Valor do input:", e.target.value);
+          setCityName(e.target.value);
+        }}
+      />
+      <Button
+        type="button"
+        onClick={() => {
+          console.log("Botão buscar clicado");
+          handleSearch();
+        }}
+      >
+        Buscar
+      </Button>
+      <ul>
+        {cityList.map((city) => (
+          <li key={city.id} onClick={() => handleNavigate(city.id)}>
+            {city.nome} / {city.estado}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

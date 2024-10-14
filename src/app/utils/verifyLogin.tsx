@@ -1,8 +1,4 @@
-import { useUserContext } from "../context/UserContext";
-
-export const verifyLogin = () => {
-  const { setUserName } = useUserContext();
-
+export const verifyLogin = (setUserName: (name: string) => void) => {
   if (typeof window !== "undefined") {
     const sessionData = sessionStorage.getItem("userToken");
     if (sessionData) {

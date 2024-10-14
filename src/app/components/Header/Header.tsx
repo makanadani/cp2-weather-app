@@ -24,11 +24,20 @@ export const Header = ({ title, userName }: HeaderProps) => {
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
+      console.log("Iniciando logout...");
+
       sessionStorage.removeItem("userToken");
+      console.log("Token removido do sessionStorage");
+
       if (userContext?.setUserName) {
         userContext.setUserName("");
+        console.log("Nome de usuário no contexto limpo");
+      } else {
+        console.error("Erro ao atualizar o contexto do usuário");
       }
+
       router.push("/login");
+      console.log("Redirecionando para a página de login");
     }
   };
 
@@ -36,7 +45,7 @@ export const Header = ({ title, userName }: HeaderProps) => {
     <StyledHeader>
       <h1>{title}</h1>
       <div>
-        {userName ? (
+        {userName && userName !== "Visitante" ? (
           <StyledUserData>
             <span>{userName}</span>
             <StyledUserDataButton onClick={handleLogout}>

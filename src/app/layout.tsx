@@ -1,7 +1,7 @@
 "use client";
 
+import { Menu } from "./components/Menu/Menu";
 import styled from "styled-components";
-import { UserContextProvider } from "./context/UserContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,16 +11,19 @@ const StyledLayout = styled.div`
   width: 92vw;
   margin: 3vw auto;
   display: grid;
-  grid-template-rows: 84vh 10vh;
+  grid-template-rows: auto 1fr auto;
 `;
 
-export default function Layout({ children }: LayoutProps) {
+export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="pt-br">
       <body>
-        <UserContextProvider>
-          {children}
-        </UserContextProvider>
+        <StyledLayout>
+          <main>{children}</main>
+          <footer>
+            <Menu />
+          </footer>
+        </StyledLayout>
       </body>
     </html>
   );

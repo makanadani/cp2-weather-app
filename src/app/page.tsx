@@ -1,37 +1,52 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Header } from './components/Header/Header';
-import { useUserContext } from './context/UserContext';
-import { verifyLogin } from './utils/verifyLogin';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Header } from "./components/Header/Header";
+import { Input } from "./components/Input/Input";
+import { Button } from "./components/Button/Button";
 
-export default function HomePage() {
-  const { userName, setUserName } = useUserContext();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+export default function Search() {
+  const router = useRouter();
+  const [cityName, setCityName] = useState<string>("");
+  const [cityList, setCityList] = useState<any[]>([]);
 
-  useEffect(() => {
-    const sessionData = sessionStorage.getItem("userToken");
-    if (sessionData) {
-      try {
-        const userData = JSON.parse(sessionData);
-        setUserName(userData.name);
-      } catch (error) {
-        console.error("Erro ao decodificar o token", error);
-      }
-    } else {
-      verifyLogin();
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(
+        `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
+      );
+      const data = await response.json();
+      setCityList(data);
+    } catch (error) {
+      console.error(error);
     }
-    setIsLoading(false);
-  }, [setUserName]);
+  };
+
+  const handleNavigate = (cityCode: number) => {
+    router.push(`/?cityCode=${cityCode}`);
+  };
 
   return (
     <div>
-      <Header title="Página Inicial" userName={userName || 'Visitante'} />
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : (
-        <p>Bem-vindo, {userName}!</p>
-      )}
+      <Header title="Busca" userName="Visitante" />
+      <Input
+        id="search"
+        name="search"
+        label="Buscar Cidade"
+        type="text"
+        onChange={(e) => setCityName(e.target.value)}
+      />
+      <Button type="button" onClick={handleSearch}>
+        Buscar
+      </Button>
+      <ul>
+        {cityList.map((city) => (
+          <li key={city.id} onClick={() => handleNavigate(city.id)}>
+            {city.nome} / {city.estado}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
