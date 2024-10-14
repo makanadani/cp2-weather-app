@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Header } from '../components/Header/Header';
-import { useUserContext } from '../UserContext';
+import { useUserContext } from '../context/UserContext';
 import { VerifyLogin } from '../utils/verifyLogin';
 
 interface CityWeather {

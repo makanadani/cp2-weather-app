@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
-import { useUserContext } from "../UserContext";
+import { useUserContext } from "../context/UserContext";
 import { Button } from "../components/Button/Button";
 import { Input } from "../components/Input/Input";
 

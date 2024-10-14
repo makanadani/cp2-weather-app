@@ -1,6 +1,6 @@
 "use client";
 
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
   html, body, main, article, nav, aside, section,
@@ -25,19 +25,12 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  button,
-  select,
-  textarea,
-  input {
-    max-width: 100%;
-    color: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    vertical-align: baseline;
-  }
-
-  button::-moz-focus-inner {
-    border: 0;
+  body {
+    font-family: ${(props) => props.theme.fonts.primary};
+    background-color: ${(props) => props.theme.colors.app.clear.morning.background};
+    color: ${(props) => props.theme.colors.app.clear.morning.text};
+    min-height: 100vh;
+    line-height: 1.38;
   }
 
   a {

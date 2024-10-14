@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import UserContext from "../../UserContext";
+import UserContext from "../../context/UserContext";
 import {
   StyledHeader,
   StyledUserData,

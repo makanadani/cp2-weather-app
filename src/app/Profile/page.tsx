@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
-import { useUserContext } from "../UserContext";
+import { useUserContext } from "../context/UserContext";
 import { Header } from "../components/Header/Header";
 
 export default function Profile() {

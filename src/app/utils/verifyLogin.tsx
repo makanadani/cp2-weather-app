@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect } from "react";
-import { useUserContext } from "../UserContext";
+import { useUserContext } from "../context/UserContext";
 
 export const VerifyLogin = () => {
   const { setUserName } = useUserContext();
