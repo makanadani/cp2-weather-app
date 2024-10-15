@@ -11,7 +11,8 @@ export default function Favorites() {
 
   return (
     <>
-      <Header title="Favoritos" userName={userName} />
+      <Header title="Favoritoss" userName={userName} />
     </>
   );
 }
+
