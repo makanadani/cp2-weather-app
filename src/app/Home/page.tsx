@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "../context/UserContext";
-import { Header } from "../components/Header/Header";
+import { Header } from "../components/Header";
 import { verifyLogin } from "../utils/verifyLogin";
 
 interface CityWeather {

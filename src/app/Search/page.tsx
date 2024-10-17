@@ -1,69 +1,37 @@
-"use client";
+import { GetServerSideProps } from "next";
+import { Header } from "../components/Header";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
 
-import { useState, useContext } from "react";
-import { useRouter } from "next/navigation";
-import UserContext from "../context/UserContext";
-import { Header } from "../components/Header/Header";
-import { Input } from "../components/Input/Input";
-import { Button } from "../components/Button/Button";
+interface City {
+  id: number;
+  nome: string;
+  estado: string;
+}
 
-export default function Search() {
-  const { userName } = useContext(UserContext);
-  const router = useRouter();
-  const [cityName, setCityName] = useState<string>("");
-  const [cityList, setCityList] = useState<any[]>([]);
+interface SearchProps {
+  userName: string;
+  cityList: City[];
+  cityName: string;
+}
 
-  const handleSearch = async () => {
-    console.log("handleSearch chamado");
-    if (!cityName) {
-      alert("Por favor, insira o nome de uma cidade.");
-      return;
-    }
-    try {
-      const response = await fetch(
-        `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
-      );
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados da cidade");
-      }
-      const data = await response.json();
-      console.log("Dados recebidos:", data);
-      setCityList(data);
-    } catch (error) {
-      console.error("Erro:", error);
-    }
-  };
-
-  const handleNavigate = (cityCode: number) => {
-    console.log("Navegando para a cidade com código:", cityCode);
-    router.push(`/?cityCode=${cityCode}`);
-  };
-
+export default function Search({ userName, cityList, cityName }: SearchProps) {
   return (
     <div>
       <Header title="Busca" userName={userName || "Visitante"} />
-      <Input
-        id="search"
-        name="search"
-        label="Buscar Cidade"
-        type="text"
-        onChange={(e) => {
-          console.log("Valor do input:", e.target.value);
-          setCityName(e.target.value);
-        }}
-      />
-      <Button
-        type="button"
-        onClick={() => {
-          console.log("Botão buscar clicado");
-          handleSearch();
-        }}
-      >
-        Buscar
-      </Button>
+      <form method="GET" action="/search">
+        <Input
+          id="search"
+          name="cityName"
+          label="Buscar Cidade"
+          type="text"
+          defaultValue={cityName}
+        />
+        <Button type="submit">Buscar</Button>
+      </form>
       <ul>
         {cityList.map((city) => (
-          <li key={city.id} onClick={() => handleNavigate(city.id)}>
+          <li key={city.id}>
             {city.nome} / {city.estado}
           </li>
         ))}
@@ -71,3 +39,37 @@ export default function Search() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const userToken = context.req.cookies["userToken"];
+  let userName = "Visitante";
+
+  if (userToken) {
+    userName = "Usuário Autenticado";
+  }
+
+  const cityName = context.query.cityName || "";
+
+  let cityList: City[] = [];
+
+  if (cityName) {
+    try {
+      const response = await fetch(
+        `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
+      );
+      if (response.ok) {
+        cityList = await response.json();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados da cidade:", error);
+    }
+  }
+
+  return {
+    props: {
+      userName,
+      cityName,
+      cityList,
+    },
+  };
+};

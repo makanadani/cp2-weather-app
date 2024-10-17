@@ -1,8 +1,10 @@
-import { colors } from './Colors';
+import { extendTheme } from "@chakra-ui/react";
+import { colors } from "./theme/colors";
+import { globalStyles } from "./theme/globalStyles";
 
-export const theme = {
+const theme = extendTheme({
   colors,
-  fonts: {
-    primary: '"Poppins", Arial, Helvetica, sans-serif',
-  },
-};
+  styles: globalStyles,
+});
+
+export default theme;

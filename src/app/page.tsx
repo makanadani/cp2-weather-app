@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "./components/Header/Header";
-import { Input } from "./components/Input/Input";
-import { Button } from "./components/Button/Button";
+import { Header } from "./components/Header";
+import { Input } from "./components/Input";
+import { Button } from "./components/Button";
 
 export default function Search() {
   const router = useRouter();

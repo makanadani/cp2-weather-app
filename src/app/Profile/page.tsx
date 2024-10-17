@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "../context/UserContext";
-import { Header } from "../components/Header/Header";
+import { Header } from "../components/Header";
 
 interface CustomJwtPayload {
   name: string;

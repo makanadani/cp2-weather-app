@@ -3,8 +3,8 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import UserContext from "../context/UserContext";
-import { Button } from "../components/Button/Button";
-import { Input } from "../components/Input/Input";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
 
 export default function Login() {
   const userContext = useContext(UserContext);

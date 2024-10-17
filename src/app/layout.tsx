@@ -1,29 +1,26 @@
-"use client";
+import { ReactNode } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
+import Header from "./components/Header";
+import { Poppins } from "next/font/google";
 
-import { Menu } from "./components/Menu/Menu";
-import styled from "styled-components";
+const poppins = Poppins({
+  weight: ["400", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+});
 
-interface LayoutProps {
-  children: React.ReactNode;
+interface RootLayoutProps {
+  children: ReactNode;
 }
 
-const StyledLayout = styled.div`
-  width: 92vw;
-  margin: 3vw auto;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-`;
-
-export default function RootLayout({ children }: LayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-BR" className={poppins.variable}>
       <body>
-        <StyledLayout>
-          <main>{children}</main>
-          <footer>
-            <Menu />
-          </footer>
-        </StyledLayout>
+        <ChakraProvider>
+          <Header title="Minha App" userName="Visitante" />
+          {children}
+        </ChakraProvider>
       </body>
     </html>
   );

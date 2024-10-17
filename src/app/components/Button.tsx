@@ -1,6 +1,4 @@
-"use client";
-
-import { StyledButton } from "./Button.style";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -10,8 +8,12 @@ interface ButtonProps {
 
 export const Button = ({ children, type, onClick }: ButtonProps) => {
   return (
-    <StyledButton type={type} onClick={onClick}>
+    <ChakraButton 
+      type={type} 
+      onClick={onClick} 
+      colorScheme="teal"
+    >
       {children}
-    </StyledButton>
+    </ChakraButton>
   );
 };
