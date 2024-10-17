@@ -1,37 +1,30 @@
-"use client"; // Marcar como Client Component
+"use client"
 
 import { useState } from "react";
-import { Header } from "../components/Header";
-import { Input } from "../components/Input";
-import { Button } from "../components/Button";
+import { useRouter } from "next/navigation";
+import { Header } from "../components/Header/Header";
+import { Input } from "../components/Input/Input";
+import { Button } from "../components/Button/Button";
 
-interface City {
-  id: number;
-  nome: string;
-  estado: string;
-}
-
-export default function SearchPage() {
+export default function Search() {
+  const router = useRouter();
   const [cityName, setCityName] = useState<string>("");
-  const [cityList, setCityList] = useState<City[]>([]);
+  const [cityList, setCityList] = useState<any[]>([]);
 
   const handleSearch = async () => {
-    if (!cityName) {
-      alert("Por favor, insira o nome de uma cidade.");
-      return;
-    }
     try {
       const response = await fetch(
         `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
       );
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados da cidade");
-      }
       const data = await response.json();
       setCityList(data);
     } catch (error) {
-      console.error("Erro:", error);
+      console.error(error);
     }
+  };
+
+  const handleNavigate = (cityCode: number) => {
+    router.push(`/?cityCode=${cityCode}`);
   };
 
   return (
@@ -40,7 +33,7 @@ export default function SearchPage() {
       <Input
         id="search"
         name="search"
-        label="Buscar Cidade"
+        label="Buscar cidade"
         type="text"
         value={cityName}
         onChange={(e) => setCityName(e.target.value)}
@@ -50,7 +43,7 @@ export default function SearchPage() {
       </Button>
       <ul>
         {cityList.map((city) => (
-          <li key={city.id}>
+          <li key={city.id} onClick={() => handleNavigate(city.id)}>
             {city.nome} / {city.estado}
           </li>
         ))}

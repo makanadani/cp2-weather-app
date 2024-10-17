@@ -1,19 +1,15 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import UserContext from "../context/UserContext";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
+import { setCookie } from 'nookies';
 
 export default function Login() {
-  const userContext = useContext(UserContext);
-  const router = useRouter();
-
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const router = useRouter();
 
-  const handleSendLogin = async () => {
+  const handleLogin = async () => {
     if (!login || !password) {
       alert("Por favor, preencha todos os campos.");
       return;
@@ -23,7 +19,7 @@ export default function Login() {
       const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json; charset=UTF-8",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ login, password }),
       });
@@ -34,13 +30,11 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (data && data.token) {
-        sessionStorage.setItem("userToken", JSON.stringify(data));
-        if (userContext && userContext.setUserName) {
-          userContext.setUserName(data.name);
-        } else {
-          console.error("UserContext não está disponível.");
-        }
+      if (data.token) {
+        setCookie(null, 'userToken', data.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
 
         router.push("/profile");
       }
@@ -50,34 +44,28 @@ export default function Login() {
   };
 
   return (
-    <>
+    <div>
       <h1>Login</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSendLogin();
+          handleLogin();
         }}
       >
-        <Input
+        <input
           type="text"
-          id="login"
-          name="login"
-          label="Login"
+          placeholder="Login"
+          value={login}
           onChange={(e) => setLogin(e.target.value)}
-          placeholder="Digite seu email"
         />
-
-        <Input
-          label="Senha"
+        <input
           type="password"
-          id="password"
-          name="password"
+          placeholder="Senha"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit">
-          Login
-        </Button>
+        <button type="submit">Login</button>
       </form>
-    </>
+    </div>
   );
 }

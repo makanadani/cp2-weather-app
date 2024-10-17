@@ -1,33 +1,24 @@
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
-import { Header } from "../components/Header";
+import { jwtDecode } from "jwt-decode";
+import { redirect } from "next/navigation";
 
-interface CustomJwtPayload {
+interface JwtPayload {
   name: string;
 }
 
-export default function Profile() {
+export default function ProfilePage() {
   const cookieStore = cookies();
   const userToken = cookieStore.get("userToken")?.value;
 
-  let userName = "Visitante";
-
-  if (userToken) {
-    try {
-      const decoded = jwt.verify(userToken, "your-secret-key") as CustomJwtPayload;
-      userName = decoded.name;
-    } catch (error) {
-      console.error("Token inválido ou expirado:", error);
-    }
+  if (!userToken) {
+    redirect("/login");
   }
 
+  const decodedToken = jwtDecode<JwtPayload>(userToken);
+
   return (
-    <>
-      <Header title="Perfil" userName={userName} />
-      <div>
-        <h2>Bem-vindo, {userName}</h2>
-        <p>Aqui estão suas informações de perfil.</p>
-      </div>
-    </>
+    <div>
+      <h1>Perfil do usuário: {decodedToken.name}</h1>
+    </div>
   );
 }

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "./components/Header";
-import { Input } from "./components/Input";
-import { Button } from "./components/Button";
+import { Header } from "./components/Header/Header";
+import { Input } from "./components/Input/Input";
+import { Button } from "./components/Button/Button";
 
 export default function Home() {
   const router = useRouter();
@@ -39,8 +39,8 @@ export default function Home() {
         name="search"
         label="Buscar Cidade"
         type="text"
-        onChange={(e) => setCityName(e.target.value)}
-      />
+        onChange={(e) => setCityName(e.target.value)} value={""} 
+        />
       <Button type="button" onClick={handleSearch}>
         Buscar
       </Button>

@@ -4,13 +4,10 @@ import { createContext, useState, ReactNode } from "react";
 
 interface UserContextType {
   userName: string;
-  setUserName: React.Dispatch<React.SetStateAction<string>>;
+  setUserName: (name: string) => void;
 }
 
-const UserContext = createContext<UserContextType>({
-  userName: "",
-  setUserName: () => {},
-});
+const UserContext = createContext<UserContextType | null>(null);
 
 interface UserContextProviderProps {
   children: ReactNode;

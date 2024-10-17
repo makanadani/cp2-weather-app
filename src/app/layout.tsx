@@ -1,25 +1,14 @@
-import { ReactNode } from "react";
+import { UserContextProvider } from "./context/UserContext";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Header } from "./components/Header";
-import { Poppins } from "next/font/google";
 
-const poppins = Poppins({
-  weight: ["400", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-poppins",
-});
-
-interface RootLayoutProps {
-  children: ReactNode;
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={poppins.variable}>
+    <html lang="en">
       <body>
         <ChakraProvider>
-          <Header title="Minha App" userName="Visitante" />
-          {children}
+          <UserContextProvider>
+            {children}
+          </UserContextProvider>
         </ChakraProvider>
       </body>
     </html>
