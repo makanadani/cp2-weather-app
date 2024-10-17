@@ -60,26 +60,33 @@
   }
 }
 
-body {
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgb(var(--background-end-rgb))
-  ) rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  line-height: 1.38;
+button,
+select,
+textarea,
+input {
+  max-width: 100%;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
 
 a {
   text-decoration: none;
-  color: inherit;
 }
 
-img, svg {
+img,
+svg {
   max-width: 100%;
+  border: 0;
+}
+
+svg a {
+  display: block;
 }
 
 li {
@@ -87,9 +94,88 @@ li {
 }
 
 hr {
-  border: none;
+  border: 0;
 }
 
 table {
   border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption,
+th,
+td {
+  text-align: left;
+}
+
+::after,
+::before {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  min-height: 100vh;
+  line-height: 1.38;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5,
+h6 {
+  font-size: 12px;
+}
+
+p {
+  line-height: 1.3;
+}
+
+em {
+  font-style: oblique;
+}
+
+strong {
+  font-weight: 500;
+}
+
+ol,
+ul {
+  margin-bottom: 16px;
+}
+
+ol li {
+  margin-right: 4px;
+  margin-left: 24px;
+  list-style-type: decimal;
+}
+
+ul li {
+  margin-right: 4px;
+  margin-left: 24px;
 }
