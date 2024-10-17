@@ -1,9 +1,14 @@
-import { UserContextProvider } from "./context/UserContext";
 import { ChakraProvider } from "@chakra-ui/react";
+import { UserContextProvider } from "../context/UserContext";
+import "@/app/globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ 
+  children, 
+}: {
+  children: React.ReactNode;
+ }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <body>
         <ChakraProvider>
           <UserContextProvider>

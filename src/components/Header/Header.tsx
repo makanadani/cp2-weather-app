@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import UserContext from "../../context/UserContext";
 import {
   StyledHeader,

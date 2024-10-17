@@ -8,7 +8,7 @@ export const Menu = () => {
       <StyledWrapperMenu as="ul">
         <StyledMenuItem as="li">
           <BiHomeAlt size="1.5rem" color="#38aede" />
-          <Link href="/">Inicio</Link>
+          <Link href="/">Início</Link>
         </StyledMenuItem>
         <StyledMenuItem as="li">
           <BiSearch size="1.5rem" color="#38aede" />

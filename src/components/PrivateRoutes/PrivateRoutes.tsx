@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
-import { useRouter } from 'next/router';
+import Link from "next/link";
 
 interface PrivatePageProps {
   userToken: string | null;

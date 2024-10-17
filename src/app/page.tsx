@@ -1,60 +1,71 @@
-"use client";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { Header } from "../components/Header/Header";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Header } from "./components/Header/Header";
-import { Input } from "./components/Input/Input";
-import { Button } from "./components/Button/Button";
+interface CityWeather {
+  cidade: string;
+  estado: string;
+  clima: {
+    min: number;
+    max: number;
+    condicao_desc: string;
+  }[];
+}
 
-export default function Home() {
-  const router = useRouter();
-  const [cityName, setCityName] = useState<string>("");
-  const [cityList, setCityList] = useState<any[]>([]);
+interface HomeProps {
+  userName: string;
+  cityData: CityWeather;
+  isLoading: boolean;
+}
 
-  const handleSearch = async () => {
-    try {
-      const response = await fetch(
-        `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
-      );
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados da cidade.");
-      }
-      const data = await response.json();
-      setCityList(data);
-    } catch (error) {
-      console.error("Erro ao buscar a cidade:", error);
+export default async function Home({ searchParams }: { searchParams: { cityCode?: string } }) {
+  const cookieStore = cookies();
+  const userToken = cookieStore.get("userToken")?.value;
+
+  let userName = "Convidado";
+  if (userToken) {
+    userName = "Usuário Autenticado";
+  } else {
+    redirect("/login");
+  }
+
+  const cityCode = searchParams.cityCode ? Number(searchParams.cityCode) : 244;
+
+  let cityData: CityWeather | null = null;
+  let isLoading = true;
+
+  try {
+    const response = await fetch(
+      `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
+    );
+    if (response.ok) {
+      cityData = await response.json();
     }
-  };
-
-  const handleNavigate = (cityCode: number) => {
-    router.push(`/?cityCode=${cityCode}`);
-  };
+  } catch (error) {
+    console.error("Erro ao buscar dados da cidade:", error);
+  } finally {
+    isLoading = false;
+  }
 
   return (
-    <div>
-      <Header title="Início" userName="Visitante" />
-      <h1>Bem-vindo ao Weather App</h1>
-      <Input
-        id="search"
-        name="search"
-        label="Buscar Cidade"
-        type="text"
-        onChange={(e) => setCityName(e.target.value)} value={""} 
-        />
-      <Button type="button" onClick={handleSearch}>
-        Buscar
-      </Button>
-      <ul>
-        {cityList.length > 0 ? (
-          cityList.map((city) => (
-            <li key={city.id} onClick={() => handleNavigate(city.id)}>
-              {city.nome} / {city.estado}
-            </li>
-          ))
+    <>
+      <Header title="Início" userName={userName} />
+      <div>
+        {isLoading ? (
+          <p>Carregando...</p>
         ) : (
-          <p>Nenhuma cidade encontrada.</p>
+          <div>
+            <h2>
+              {cityData?.cidade}/{cityData?.estado}
+            </h2>
+            <p>
+              Min<span>{cityData?.clima[0].min}</span> / Max
+              <span>{cityData?.clima[0].max}</span>
+            </p>
+            <p>{cityData?.clima[0].condicao_desc}</p>
+          </div>
         )}
-      </ul>
-    </div>
+      </div>
+    </>
   );
 }

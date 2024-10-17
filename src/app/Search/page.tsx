@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Header } from "../components/Header/Header";
-import { Input } from "../components/Input/Input";
-import { Button } from "../components/Button/Button";
+import Link from "next/link";
+import { Header } from "../../components/Header/Header";
+import { Input } from "../../components/Input/Input";
+import { Button } from "../../components/Button/Button";
 
 export default function Search() {
   const router = useRouter();

@@ -18,6 +18,4 @@ export const MenuItem = ({ icon, label, link }: MenuItemProps) => {
       </Link>
     </Box>
   );
-};
-
-export default MenuItem;
+}
