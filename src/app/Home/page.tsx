@@ -1,10 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useUserContext } from "../context/UserContext";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { Header } from "../components/Header";
-import { verifyLogin } from "../utils/verifyLogin";
 
 interface CityWeather {
   cidade: string;
@@ -16,45 +12,44 @@ interface CityWeather {
   }[];
 }
 
-export default function Home() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { userName } = useUserContext();
+interface HomeProps {
+  userName: string;
+  cityData: CityWeather;
+  isLoading: boolean;
+}
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [cityData, setCityData] = useState<CityWeather | null>(null);
+export default async function Home({ searchParams }: { searchParams: { cityCode?: string } }) {
+  const cookieStore = cookies();
+  const userToken = cookieStore.get("userToken")?.value;
 
-  const loadCity = async (cityCode: number) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
-      );
-      const data: CityWeather = await response.json();
-      setCityData(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+  let userName = "Convidado";
+  if (userToken) {
+    userName = "Usuário Autenticado";
+  } else {
+    redirect("/login");
+  }
+
+  const cityCode = searchParams.cityCode ? Number(searchParams.cityCode) : 244;
+
+  let cityData: CityWeather | null = null;
+  let isLoading = true;
+
+  try {
+    const response = await fetch(
+      `https://brasilapi.com.br/api/cptec/v1/clima/previsao/${cityCode}`
+    );
+    if (response.ok) {
+      cityData = await response.json();
     }
-  };
-
-  useEffect(() => {
-    const cityCodeParam = searchParams.get("cityCode");
-    const cityCode = cityCodeParam ? Number(cityCodeParam) : 244;
-    loadCity(cityCode);
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!userName) {
-      verifyLogin();
-    }
-  }, [userName]);
+  } catch (error) {
+    console.error("Erro ao buscar dados da cidade:", error);
+  } finally {
+    isLoading = false;
+  }
 
   return (
     <>
-      <Header title="Inicio" userName={userName || "Convidado"} />
-
+      <Header title="Início" userName={userName} />
       <div>
         {isLoading ? (
           <p>Carregando...</p>
@@ -64,7 +59,7 @@ export default function Home() {
               {cityData?.cidade}/{cityData?.estado}
             </h2>
             <p>
-              Min<span>{cityData?.clima[0].min}</span>/ Max
+              Min<span>{cityData?.clima[0].min}</span> / Max
               <span>{cityData?.clima[0].max}</span>
             </p>
             <p>{cityData?.clima[0].condicao_desc}</p>

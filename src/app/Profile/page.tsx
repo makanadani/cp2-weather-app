@@ -1,9 +1,5 @@
-"use client";
-
-import { useContext, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-import UserContext from "../context/UserContext";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 import { Header } from "../components/Header";
 
 interface CustomJwtPayload {
@@ -11,19 +7,19 @@ interface CustomJwtPayload {
 }
 
 export default function Profile() {
-  const router = useRouter();
-  const { userName, setUserName } = useContext(UserContext);
+  const cookieStore = cookies();
+  const userToken = cookieStore.get("userToken")?.value;
 
-  useEffect(() => {
-    const userToken = JSON.parse(sessionStorage.getItem("userToken") || "null");
+  let userName = "Visitante";
 
-    if (userToken) {
-      const userData = jwtDecode<CustomJwtPayload>(userToken.token);
-      setUserName(userData.name);
-    } else {
-      router.push("/login");
+  if (userToken) {
+    try {
+      const decoded = jwt.verify(userToken, "your-secret-key") as CustomJwtPayload;
+      userName = decoded.name;
+    } catch (error) {
+      console.error("Token inválido ou expirado:", error);
     }
-  }, [setUserName, router]);
+  }
 
   return (
     <>

@@ -3,6 +3,50 @@
 @tailwind utilities;
 
 :root {
+  --clear-morning-background-rgb: 135, 206, 235;
+  --clear-morning-card-rgb: 56, 174, 222;
+  --clear-morning-text-rgb: 255, 255, 255;
+  --clear-morning-dark-text-rgb: 21, 96, 127;
+
+  --clear-night-background-rgb: 44, 62, 80;
+  --clear-night-card-rgb: 33, 46, 60;
+  --clear-night-text-rgb: 236, 240, 241;
+
+  --cloudy-morning-background-rgb: 211, 211, 211;
+  --cloudy-morning-card-rgb: 158, 158, 158;
+  --cloudy-morning-text-rgb: 44, 62, 80;
+
+  --cloudy-night-background-rgb: 52, 73, 94;
+  --cloudy-night-card-rgb: 39, 55, 70;
+  --cloudy-night-text-rgb: 236, 240, 241;
+
+  --rainy-morning-background-rgb: 93, 109, 126;
+  --rainy-morning-card-rgb: 70, 82, 94;
+  --rainy-morning-text-rgb: 255, 255, 255;
+
+  --rainy-night-background-rgb: 44, 62, 80;
+  --rainy-night-card-rgb: 33, 46, 60;
+  --rainy-night-text-rgb: 236, 240, 241;
+
+  --stormy-morning-background-rgb: 75, 75, 75;
+  --stormy-morning-card-rgb: 56, 56, 56;
+  --stormy-morning-text-rgb: 255, 255, 255;
+
+  --stormy-night-background-rgb: 28, 40, 51;
+  --stormy-night-card-rgb: 21, 30, 38;
+  --stormy-night-text-rgb: 236, 240, 241;
+
+  --snowy-morning-background-rgb: 224, 224, 224;
+  --snowy-morning-card-rgb: 168, 168, 168;
+  --snowy-morning-text-rgb: 44, 62, 80;
+
+  --snowy-night-background-rgb: 189, 195, 199;
+  --snowy-night-card-rgb: 137, 147, 154;
+  --snowy-night-text-rgb: 44, 62, 80;
+
+  --text-dark-rgb: 31, 30, 49;
+  --text-light-rgb: 153, 153, 153;
+
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -16,12 +60,122 @@
   }
 }
 
+html, body, main, article, nav, aside, section, header, footer, address, div, 
+h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li, dl, dt, dd, hr, pre, 
+figure, figcaption, table, caption, thead, tbody, tfoot, tr, th, td, col, 
+colgroup, form, fieldset, legend, label, input, button, select, datalist, 
+optgroup, option, textarea, progress, meter, img, iframe, embed, object, 
+param, video, audio, source, canvas, track, map, area, del, ins, a, em, 
+strong, i, b, u, s, small, abbr, q, cite, dfn, sub, sup, time, code, kbd, 
+samp, var, bdi, bdo, ruby, rt, rp, wbr, mark, span, br {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  font-style: normal;
+  font-weight: normal;
+  vertical-align: baseline;
+  background: transparent;
+  box-sizing: border-box;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  ) rgb(var(--background-start-rgb));
+  @apply min-h-screen font-sans;
+  line-height: 1.38;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+}
+
+img, svg {
+  max-width: 100%;
+  border: 0;
+}
+
+svg a {
+  display: block;
+}
+
+li {
+  list-style: none;
+}
+
+hr {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+}
+
+::after, ::before {
+  box-sizing: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 12px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+p {
+  line-height: 1.3;
+}
+
+em {
+  font-style: oblique;
+}
+
+strong {
+  font-weight: 500;
+}
+
+ol, ul {
+  margin-bottom: 16px;
+}
+
+ol li {
+  margin-right: 4px;
+  margin-left: 24px;
+  list-style-type: decimal;
+}
+
+ul li {
+  margin-right: 4px;
+  margin-left: 24px;
 }

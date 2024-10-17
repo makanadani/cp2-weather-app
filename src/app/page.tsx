@@ -6,7 +6,7 @@ import { Header } from "./components/Header";
 import { Input } from "./components/Input";
 import { Button } from "./components/Button";
 
-export default function Search() {
+export default function Home() {
   const router = useRouter();
   const [cityName, setCityName] = useState<string>("");
   const [cityList, setCityList] = useState<any[]>([]);
@@ -16,10 +16,13 @@ export default function Search() {
       const response = await fetch(
         `https://brasilapi.com.br/api/cptec/v1/cidade/${cityName}`
       );
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados da cidade.");
+      }
       const data = await response.json();
       setCityList(data);
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao buscar a cidade:", error);
     }
   };
 
@@ -29,7 +32,8 @@ export default function Search() {
 
   return (
     <div>
-      <Header title="Busca" userName="Visitante" />
+      <Header title="Início" userName="Visitante" />
+      <h1>Bem-vindo ao Weather App</h1>
       <Input
         id="search"
         name="search"
@@ -41,11 +45,15 @@ export default function Search() {
         Buscar
       </Button>
       <ul>
-        {cityList.map((city) => (
-          <li key={city.id} onClick={() => handleNavigate(city.id)}>
-            {city.nome} / {city.estado}
-          </li>
-        ))}
+        {cityList.length > 0 ? (
+          cityList.map((city) => (
+            <li key={city.id} onClick={() => handleNavigate(city.id)}>
+              {city.nome} / {city.estado}
+            </li>
+          ))
+        ) : (
+          <p>Nenhuma cidade encontrada.</p>
+        )}
       </ul>
     </div>
   );

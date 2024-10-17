@@ -36,7 +36,6 @@ export default function Login() {
 
       if (data && data.token) {
         sessionStorage.setItem("userToken", JSON.stringify(data));
-
         if (userContext && userContext.setUserName) {
           userContext.setUserName(data.name);
         } else {
@@ -75,9 +74,7 @@ export default function Login() {
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
-          type="submit"
-        >
+        <Button type="submit">
           Login
         </Button>
       </form>

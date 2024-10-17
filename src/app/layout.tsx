@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import Header from "./components/Header";
+import { Header } from "./components/Header";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({

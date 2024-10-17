@@ -1,13 +1,22 @@
-export const verifyLogin = (setUserName: (name: string) => void) => {
-  if (typeof window !== "undefined") {
-    const sessionData = sessionStorage.getItem("userToken");
-    if (sessionData) {
-      try {
-        const userData = JSON.parse(sessionData);
-        setUserName(userData.name);
-      } catch (error) {
-        console.error("Erro ao decodificar o token", error);
-      }
+import { cookies } from "next/headers";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+interface CustomJwtPayload extends JwtPayload {
+  name: string;
+}
+
+export const verifyLogin = () => {
+  const cookieStore = cookies();
+  const sessionData = cookieStore.get("userToken")?.value;
+
+  if (sessionData) {
+    try {
+      const decoded = jwt.verify(sessionData, "your-secret-key") as CustomJwtPayload;
+      return decoded.name;
+    } catch (error) {
+      console.error("Erro ao verificar o token:", error);
+      return null;
     }
   }
+  return null;
 };
